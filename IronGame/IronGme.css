@@ -1,0 +1,12 @@
+body{
+    display: flex;
+}
+
+canvas{
+    border: 1px solid royalblue;
+}
+
+#game-logo{
+    display: flex;
+    background-image: url'https://eoutlet.2023shoponline.com/category?name=street%20basketball%20court%20wallpaper';
+}
