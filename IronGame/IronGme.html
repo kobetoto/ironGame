@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="IronGme.css" />
-    <title>H$$P</title>
-  </head>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="IronGme.css" />
+  <title>H$$P</title>
+</head>
+
 <body>
+  <div id="aside">
+    <img
+      src="https://cdn.discordapp.com/attachments/1084937735581741116/1085546745343266896/totodadababa_Basketball_shooting_game_called_HOOP_logo_81a80368-ac03-4029-9bbc-c69647b3dc23.png"
+      alt="H$$P-logo" class="logo">
+    <button id="start-button">🏀BALLIN🏀</button>
+    <!--SCORE BOARD = HTML || JS -->
+    <table id="scorBoard">
+      <thead>
+        <tr>
+          <th>SCORE</th>
+          <th>TIMER</th>
+          <th>LEVEL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="S_T_L">
+          <td class="score">
+            <span>00</span>
+          </td>
+          <td class="time">
+            <span>00:00</span>
+          </td>
+          <td class="level">
+            <span>1</span>
+          </td>
 
-    <div class="game-logo">
-        <img src="https://www.logolynx.com/images/logolynx/96/96710190a6a74e3bf38782a901bcfff7.jpeg" alt="H$$P-logo" class="logo" />
-        <button id="start-button">🏀BALLIN🏀</button>
-    </div>
-
-    <div id="game-board">
-        <canvas id="canvas" width="1000" height="1000"></canvas>
-    </div>
-  
-
-
-  <script type="text/javascript" src="IronGme.js"></script> chemin relatif d'url
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--CANVAS INJECT BY JS-->
+  <script type="text/javascript" src="IronGme.js"></script> <!--chemin relatif d'url-->
 </body>
+
 </html>

@@ -1,12 +1,41 @@
+
+
 body{
+    height: 100vh;
     display: flex;
-}
+    background-image: url('https://imgs.search.brave.com/Ba5qotq2ISYEQ8VEgDD88B1d5E27r-8oL1oNwfneQE8/rs:fit:1200:1080:1/g:ce/aHR0cHM6Ly9oZHdh/bGxzb3VyY2UuY29t/L2ltZy8yMDIwLzgv/bmJhLTJrMjEta29i/ZS13YWxscGFwZXIt/NzE4MzMtNzQzMjct/aGQtd2FsbHBhcGVy/cy5qcGc');
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}   
 
 canvas{
-    border: 1px solid royalblue;
+    border: 3px solid white;
+    margin-left: 42px;
+    background-image: url('https://cdn.discordapp.com/attachments/1084937735581741116/1085546667396313098/totodadababa_background_basketball_video_game_pixar_style_55b86151-eefa-4984-ac04-2216a23e1dbb.png    ');
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
-#game-logo{
+
+
+div{
+    border: 3px solid red;
     display: flex;
-    background-image: url'https://eoutlet.2023shoponline.com/category?name=street%20basketball%20court%20wallpaper';
+    flex-direction: column;
+
+}
+
+#start-button{
+padding: 13px 88px ;
+background-color: #a54306;
+margin-left: 150px;
+margin-right: 150px;
+border-radius: 50%;
+color: white;
+text-align: center;
+text-decoration: none;
+font-size: 23px;
+font-family: 'font-family: 'Permanent Marker', cursive;';
+
 }
