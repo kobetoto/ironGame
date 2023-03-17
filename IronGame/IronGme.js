@@ -20,19 +20,39 @@ const myGameArea = {
     this.bgimage.src= 'https://cdn.discordapp.com/attachments/1084937735581741116/1085546667396313098/totodadababa_background_basketball_video_game_pixar_style_55b86151-eefa-4984-ac04-2216a23e1dbb.png'
     
   },
-  draw: function(){ // toutes les 16ms🎦
+  draw: function(){ // BOUCLE D'ANIMATION --> toutes les 16ms🎦
+
     const ctx = this.context;//console.log('ctx=', ctx) =>DEBUG
-
-    // clear
+ 
     ctx.clearRect(0,0,1200,1000);//🧽
-
 
     ctx.drawImage(this.bgimage,0,0,1200,1000); //draw=>bgimage=>backGround
 
-    ball.draw(play1.x+140,play1.y+103);
+    document.addEventListener('keydown' , (e) => {    
+      switch(e.keyCode){
+        case 38:
+          console.log("coucou");
+          play1.y -= 0.01;  
+          break;
+        case 40:
+          play1.y += 0.01;  
+          break;
+        case 37:
+          play1.x -= 0.1;  
+          break;
+        case 39:
+          play1.x += 0.1;  
+          break;
+      }
+    });
+
+    play1.newPos();
+    play1.draw();
+    board.draw();
     hoop.draw();
-    play1.draw()
-    //board.draw(150,300,118,88,'blue');
+    ball.draw(play1.x+100,play1.y+80);
+
+
     this.int = requestAnimationFrame(() => {this.draw()})// rappel toutes les 16ms la Function DRAW
   },
   stop: function () {
@@ -57,6 +77,10 @@ class Player{
   constructor(x,y){
     this.x = 500;
     this.y = 500;
+
+    this.speedX = 0;
+    this.speedY = 0;
+
     
     const img = document.createElement('img');//<img>
     img.src = 'https://cdn.discordapp.com/attachments/968858711303004251/1085253910052208790/g1.png';
@@ -69,25 +93,24 @@ class Player{
   draw(){
     const ctx = myGameArea.context
     if (!this.image) return
-    ctx.drawImage(this.image, this.x,this.y,200,200)
+    ctx.drawImage(this.image, this.x,this.y,150,150)
   }
   
   animate(){
-    this.draw();
+
 
     requestAnimationFrame(this.animate)
   }
-  keydown() {document.addEventListener('keydown', function(event){
-    console.log('keydown OK', event.keyCode)
 
-    switch(event.keycode){
-      case 37:
-      play1.x -= 100  
-      break;
-    }
-  })}
-  }
+  newPos() {
+    this.x; 
+    this.y;  
+    
+};
+
+}
 let play1 = new Player()//{x,y,img(<img src="">)}
+
 
 
 
@@ -102,7 +125,7 @@ let ball = {
     const ctx = myGameArea.context;
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "blue";
     ctx.fill();
     ctx.closePath();
 
@@ -121,14 +144,14 @@ class Hoop{
   }
   draw(){
     const ctx = myGameArea.context;
-    ctx.fillRect(this.x, this.y, this.width, this.heigth);
     ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.width, this.heigth);
   }
 }
 
 const hoop = new Hoop(300, 428, 47, 9, 'red'); //{x,y,width,heigth, color} (210, 375, 42, 9, '')
 
-const board = new Hoop(150,300,118,88,'white'); /**********avec ou sans BORD????***********/
+const board = new Hoop(250,363,148,88,'white'); /**********avec ou sans BORD????***********/
 
 /*
 ███████ ████████  █████  ██████  ████████ 
