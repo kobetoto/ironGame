@@ -2,13 +2,13 @@
 
 body{
     height: 100vh;
-    width: 100vh;
     display: flex;
     background-image: url('https://imgs.search.brave.com/Ba5qotq2ISYEQ8VEgDD88B1d5E27r-8oL1oNwfneQE8/rs:fit:1200:1080:1/g:ce/aHR0cHM6Ly9oZHdh/bGxzb3VyY2UuY29t/L2ltZy8yMDIwLzgv/bmJhLTJrMjEta29i/ZS13YWxscGFwZXIt/NzE4MzMtNzQzMjct/aGQtd2FsbHBhcGVy/cy5qcGc');
     background-size: cover;
     background-repeat: no-repeat;
     font-family: 'Permanent Marker';
     padding-left: 50px;
+    overflow: hidden;
 
 }   
 
