@@ -15,6 +15,7 @@ class Hoop {
     this.heigth = h;
     this.color = c;
   }
+
   draw() {
     const ctx = myGameArea.context;
     ctx.fillStyle = this.color;
@@ -28,6 +29,8 @@ class Player {
   constructor(x, y) {
     this.x = 500;
     this.y = 500;
+
+    this.shooted = false;
 
     this.speedX = 0;
     this.speedY = 0;
@@ -54,6 +57,7 @@ class Player {
     this.x;
     this.y;
   }
+
 }
 
 let play1 = new Player(); //{x,y,img(<img src="">)}
@@ -63,49 +67,48 @@ let play1 = new Player(); //{x,y,img(<img src="">)}
 let ball = {
   x: 0,
   y: 0,
-  speedBall: 0,
 
-  draw: function (x, y) {
+  deltaX: 0, // distance entre la main et la balle
+
+  draw: function () {
     const ctx = myGameArea.context;
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = "blue";
+    ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
     ctx.fill();
+    ctx.fillStyle = "blue";
     ctx.closePath();
   },
+
+  crash: function(x) {
+    return this.x === x;
+  }
 };
 
 //🌈
 let rainbow = {
-   alpha : (55* Math.PI) / 180,//angle📐: 55degres (radian)
-   v0: 50,//vitesse= 50;
+  alpha: (55 * Math.PI) / 180,//angle📐: 55degres (radian)
+  v0: 85,//vitesse= 50;
 
 
-  rainbowY: function(x){
-
+  rainbowY: function (x) {
     return (
       (-0.5 * 9.81 * Math.pow(x, 2)) / (Math.cos(this.alpha) ** 2 * this.v0 ** 2) +
-      Math.tan(this.alpha) * x );
+      Math.tan(this.alpha) * x);
   },
 
 
-  draw: function(x0, y0){
+  drawPx: function (x, y) {
     const ctx = myGameArea.context;
-    let roundedX = Math.round(x0);
-    let roundedY = Math.round(y0);
-    ctx.fillStyle = "white";
-    ctx.fillRect(roundedX, roundedY, 2, 1);
+    ctx.fillStyle = "#00ff00";
+    ctx.fillRect(x, y, 1, 1);
   },
 
-  drawRainbow: function(){
-    for(let i =0; i < 200; i++)
-    {
+  draw: function () {
+    for (let i = 0; i < 2000; i++) {
       this.rainbowY(i);
-      this.draw((play1.x+100) - i, (play1.y+80) - this.rainbowY(i));
+      this.drawPx((play1.x + 100) - i, (play1.y + 80) - this.rainbowY(i));
     }
   }
-
-
 }
 
 
@@ -148,34 +151,54 @@ const myGameArea = {
           play1.x += 10;
           break;
         case 81:
-          rainbow.v0 +=1;
+          rainbow.v0 += 1;
           break
         case 68:
-          rainbow.v0 -=1;
+          rainbow.v0 -= 1;
           break;
         case 90:
-          rainbow.alpha +=0.05;
+          rainbow.alpha += (1 * Math.PI) / 180;
           break;
         case 83:
-          rainbow.alpha -=0.05
-      }
+          rainbow.alpha -= (1 * Math.PI) / 180;
+          break;
+        case 32:
+          play1.shooted = true;
+       }   
     });
   },
 
   draw: function () {
     // BOUCLE D'ANIMATION --> toutes les 16ms🎦
-    const ctx = this.context; //console.log('ctx=', ctx) =>DEBUG
+    const ctx = this.context;
 
     ctx.clearRect(0, 0, 1200, 1000); //🧽
 
-    ctx.drawImage(this.bgimage, 0, 0, 1200, 1000); //draw=>bgimage=>backGround
+    ctx.drawImage(this.bgimage, 0, 0, 1200, 1000);
 
     hoop.draw();
     play1.newPos();
     play1.draw();
-    //board.draw();
-    ball.draw(play1.x + 100, play1.y + 80);
-    rainbow.drawRainbow()
+
+    ball.x = play1.x + 100
+    ball.y = play1.y + 80
+
+    if (play1.shooted) {
+
+      ball.deltaX += 7;
+
+      ball.x -=ball.deltaX; 
+
+      ball.y -=rainbow.rainbowY(ball.deltaX);
+    }
+    ball.draw();
+    rainbow.draw()
+
+    //bucketORnot
+    if(ball.crash(hoop.x) === true){
+      this.stop
+    }
+    
 
     this.int = requestAnimationFrame(() => {
       this.draw();
@@ -198,20 +221,3 @@ document.getElementById("start-button").onclick = () => {
   myGameArea.start();
   myGameArea.draw();
 };
-
-/*
- ██████╗  █████╗ ███╗   ███╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
-██╔════╝ ██╔══██╗████╗ ████║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
-██║  ███╗███████║██╔████╔██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝ 
-██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝  
-╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║     ███████╗██║  ██║   ██║   
- ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝ 
-
-
-
-TrajBall(){}
-collision(){} 
-succFail(){}
-*/
-
-
