@@ -21,6 +21,10 @@ class Hoop {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.heigth);
   }
+
+  larg() {
+    for(let i = this.x){}
+  }
 }
 const hoop = new Hoop(300, 428, 47, 9, "red");
 
@@ -59,8 +63,7 @@ class Player {
   }
 
 }
-
-let play1 = new Player(); //{x,y,img(<img src="">)}
+let play1 = new Player();
 
 
 // 🏀
@@ -79,8 +82,13 @@ let ball = {
     ctx.closePath();
   },
 
-  crash: function(x) {
-    return this.x === x;
+  crash: function(arceau) {
+    return (this.x === hoop.x);
+  },              
+
+  reset: function () {
+    this.x = play1.x + 100
+    this.y = play1.y + 80
   }
 };
 
@@ -124,18 +132,17 @@ const myGameArea = {
   canvas: document.createElement("canvas"),
 
   start: function () {
-    const canvas = this.canvas; //<canvas>
+    const canvas = this.canvas;
     canvas.width = 1200;
     canvas.height = 1000;
     document.body.appendChild(canvas);
-    this.context = canvas.getContext("2d"); // dans myGameArea jai le context //console.log('this.context=', this.context) ==> debug
+    this.context = canvas.getContext("2d");
 
-    this.bgimage = document.createElement("img"); // <img />
+    this.bgimage = document.createElement("img");
     this.bgimage.src =
       "https://cdn.discordapp.com/attachments/1084937735581741116/1085546667396313098/totodadababa_background_basketball_video_game_pixar_style_55b86151-eefa-4984-ac04-2216a23e1dbb.png";
 
     document.addEventListener("keydown", (e) => {
-      console.log("touche enfoncee");
       switch (e.keyCode) {
         case 38:
           play1.y -= 10;
@@ -164,7 +171,12 @@ const myGameArea = {
           break;
         case 32:
           play1.shooted = true;
-       }   
+          break;
+        case 13:
+          ball.reset()
+          play1.shooted = false
+          break;
+      }
     });
   },
 
@@ -187,23 +199,29 @@ const myGameArea = {
 
       ball.deltaX += 7;
 
-      ball.x -=ball.deltaX; 
+      ball.x -= ball.deltaX;
 
-      ball.y -=rainbow.rainbowY(ball.deltaX);
+      ball.y -= rainbow.rainbowY(ball.deltaX);
     }
+
     ball.draw();
     rainbow.draw()
 
     //bucketORnot
-    if(ball.crash(hoop.x) === true){
-      this.stop
+    const crashed = ball.crash(hoop)
+    console.log('is crashed?', crashed)
+    if (crashed === true) {
+      console.log("crashhhhhhhhhhh");
+      this.stop();
     }
     
-
+    // rappel toutes les 16ms la Function DRAW
     this.int = requestAnimationFrame(() => {
       this.draw();
-    }); // rappel toutes les 16ms la Function DRAW
+    }); 
   },
+
+
   stop: function () {
     cancelAnimationFrame(this.int);
   },
