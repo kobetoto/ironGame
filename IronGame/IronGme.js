@@ -22,8 +22,20 @@ class Hoop {
     ctx.fillRect(this.x, this.y, this.width, this.heigth);
   }
 
-  larg() {
-    for(let i = this.x){}
+  right() {
+    return this.x + this.width;
+  }
+
+  left() {
+    return this.x;
+  }
+
+  top() {
+    return this.y;
+  }
+
+  bottom() {
+    return this.y + this.heigth;
   }
 }
 const hoop = new Hoop(300, 428, 47, 9, "red");
@@ -82,9 +94,18 @@ let ball = {
     ctx.closePath();
   },
 
-  crash: function(arceau) {
-    return (this.x === hoop.x);
-  },              
+  position() {
+    return this.x && this.y
+  },
+
+  crash: function (hoop) {
+    return (ball.x < hoop.x + hoop.width &&
+      ball.x > hoop.x &&
+      ball.y > hoop.y &&
+      ball.y < hoop.y + 5
+      );
+  },
+
 
   reset: function () {
     this.x = play1.x + 100
@@ -112,7 +133,7 @@ let rainbow = {
   },
 
   draw: function () {
-    for (let i = 0; i < 2000; i++) {
+    for (let i = 0; i < 3000; i++) {
       this.rainbowY(i);
       this.drawPx((play1.x + 100) - i, (play1.y + 80) - this.rainbowY(i));
     }
@@ -214,11 +235,11 @@ const myGameArea = {
       console.log("crashhhhhhhhhhh");
       this.stop();
     }
-    
+
     // rappel toutes les 16ms la Function DRAW
     this.int = requestAnimationFrame(() => {
       this.draw();
-    }); 
+    });
   },
 
 

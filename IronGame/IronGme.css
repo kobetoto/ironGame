@@ -50,7 +50,7 @@ div{
 
 #start-button{
     font-family: 'Permanent Marker';
-    color: rgb(255, 255, 255);
+    color: rgba(255, 255, 255, 0.855);
     font-style:oblique;
     font-size: larger;
 }
