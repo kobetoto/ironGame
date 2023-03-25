@@ -12,31 +12,16 @@ class Hoop {
     this.x = x;
     this.y = y;
     this.width = w;
-    this.heigth = h;
+    this.height = h;
     this.color = c;
   }
 
   draw() {
     const ctx = myGameArea.context;
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.heigth);
+    ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  right() {
-    return this.x + this.width;
-  }
-
-  left() {
-    return this.x;
-  }
-
-  top() {
-    return this.y;
-  }
-
-  bottom() {
-    return this.y + this.heigth;
-  }
 }
 const hoop = new Hoop(300, 428, 47, 9, "red");
 
@@ -45,6 +30,7 @@ class Player {
   constructor(x, y) {
     this.x = 500;
     this.y = 500;
+
 
     this.shooted = false;
 
@@ -73,58 +59,61 @@ class Player {
     this.x;
     this.y;
   }
-
 }
 let play1 = new Player();
-
 
 // 🏀
 let ball = {
   x: 0,
   y: 0,
 
+  radius: 10,
+
   deltaX: 0, // distance entre la main et la balle
 
   draw: function () {
     const ctx = myGameArea.context;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.fillStyle = "blue";
     ctx.closePath();
   },
 
   position() {
-    return this.x && this.y
+    return this.x && this.y;
   },
 
   crash: function (hoop) {
-    return (ball.x < hoop.x + hoop.width &&
-      ball.x > hoop.x &&
-      ball.y > hoop.y &&
-      ball.y < hoop.y + 5
-      );
+    return (
+      this.y + 2*this.radius > hoop.y &&
+      this.y < hoop.y + hoop.height &&
+      this.x + 2*this.radius > hoop.x &&
+      this.x < hoop.x + hoop.width
+    );
+
+    
   },
 
-
   reset: function () {
-    this.x = play1.x + 100
-    this.y = play1.y + 80
-  }
+    this.x = play1.x + 100;
+    this.y = play1.y + 80;
+    this.deltaX = 0;
+  },
 };
 
 //🌈
 let rainbow = {
-  alpha: (55 * Math.PI) / 180,//angle📐: 55degres (radian)
-  v0: 85,//vitesse= 50;
-
+  alpha: (55 * Math.PI) / 180, //angle📐: 55degres (radian)
+  v0: 85, //vitesse= 50;
 
   rainbowY: function (x) {
     return (
-      (-0.5 * 9.81 * Math.pow(x, 2)) / (Math.cos(this.alpha) ** 2 * this.v0 ** 2) +
-      Math.tan(this.alpha) * x);
+      (-0.5 * 9.81 * Math.pow(x, 2)) /
+        (Math.cos(this.alpha) ** 2 * this.v0 ** 2) +
+      Math.tan(this.alpha) * x
+    );
   },
-
 
   drawPx: function (x, y) {
     const ctx = myGameArea.context;
@@ -133,13 +122,12 @@ let rainbow = {
   },
 
   draw: function () {
-    for (let i = 0; i < 3000; i++) {
+    for (let i = 0; i < 300; i++) {
       this.rainbowY(i);
-      this.drawPx((play1.x + 100) - i, (play1.y + 80) - this.rainbowY(i));
+      this.drawPx(play1.x + 100 - i, play1.y + 80 - this.rainbowY(i));
     }
-  }
-}
-
+  },
+};
 
 /*
 ██████   █████  ███    ███ ███████      █████  ██████  ███████  █████  
@@ -180,7 +168,7 @@ const myGameArea = {
           break;
         case 81:
           rainbow.v0 += 1;
-          break
+          break;
         case 68:
           rainbow.v0 -= 1;
           break;
@@ -192,10 +180,11 @@ const myGameArea = {
           break;
         case 32:
           play1.shooted = true;
+
           break;
         case 13:
-          ball.reset()
-          play1.shooted = false
+          ball.reset();
+          play1.shooted = false;
           break;
       }
     });
@@ -213,12 +202,11 @@ const myGameArea = {
     play1.newPos();
     play1.draw();
 
-    ball.x = play1.x + 100
-    ball.y = play1.y + 80
+    ball.x = play1.x + 100;
+    ball.y = play1.y + 80;
 
     if (play1.shooted) {
-
-      ball.deltaX += 7;
+      ball.deltaX += 5;
 
       ball.x -= ball.deltaX;
 
@@ -226,13 +214,13 @@ const myGameArea = {
     }
 
     ball.draw();
-    rainbow.draw()
+    rainbow.draw();
 
     //bucketORnot
-    const crashed = ball.crash(hoop)
-    console.log('is crashed?', crashed)
+    const crashed = ball.crash(hoop);
+    console.log("is crashed?", crashed);
     if (crashed === true) {
-      console.log("crashhhhhhhhhhh");
+      console.log("CRASHH!!!!!!");
       this.stop();
     }
 
@@ -242,12 +230,10 @@ const myGameArea = {
     });
   },
 
-
   stop: function () {
     cancelAnimationFrame(this.int);
   },
 };
-
 
 /*
 ███████ ████████  █████  ██████  ████████ 
@@ -259,4 +245,55 @@ const myGameArea = {
 document.getElementById("start-button").onclick = () => {
   myGameArea.start();
   myGameArea.draw();
+  clock.startTimer();
+
+  if (ball.crash(hoop)) {
+    ball.reset();
+    const scoreElement = document.querySelector('.score span');
+    scoreElement.textContent += 2 ;
+  }
+  
 };
+
+  //timer 
+  const clock = {
+    departMinutes: 1,
+    temps: 0,
+    timer: document.getElementById("timer"),
+  
+    startTimer: function() {
+      this.temps = this.departMinutes * 60;
+  
+      setInterval(() => {
+        let minutes = parseInt(this.temps / 60, 10);
+        let secondes = parseInt(this.temps % 60, 10);
+    
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        secondes = secondes < 10 ? "0" + secondes : secondes;
+    
+        this.timer.innerText = `${minutes}:${secondes}`;
+        this.temps = this.temps <= 0 ? 0 : this.temps - 1;
+      }, 1000);
+    }
+  };
+
+if (ball.crash(hoop) === true) {
+    const img = document.createElement("img"); //<img>
+    img.src =
+      "https://imgs.search.brave.com/Tjb67985inFu23CNO3uUJS0KjvWUJ1ME_RFRaz0QLdQ/rs:fit:900:800:1/g:ce/aHR0cHM6Ly9iYW5u/ZXIyLmNsZWFucG5n/LmNvbS8yMDE4MDcy/OS9pdHYva2lzc3Bu/Zy1taWFtaS1oZWF0/LW5iYS1ob3VzdG9u/LXJvY2tldHMtc2Fu/LWFudG9uaW8tc3B1/cnMtYi1iYXNrZXRi/YWxsLW9uLWZpcmUt/NWI1ZTM1YWYxMmJj/NDkuMjYyOTEzMjEx/NTMyOTAwNzgzMDc2/OC5qcGc";
+
+    img.addEventListener("load", () => {
+      this.image = img;
+    });
+  }
+
+  draw = function() {
+    const ctx = myGameArea.context;
+    if (!this.image) return;
+    ctx.drawImage(this.image, this.x, this.y, 150, 150);
+
+
+  const scoreElement = document.querySelector('.score');
+  scoreElement.innerHTML = parseInt(scoreElement.innerHTML) + 2;
+}
+
