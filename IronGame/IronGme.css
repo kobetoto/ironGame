@@ -36,7 +36,7 @@ div{
 
 #scorBoard{
     border: 3px solid white;
-    width: 100%;
+    background-color: #ffffffab;
     border-collapse: collapse;
     text-align: center;
 }

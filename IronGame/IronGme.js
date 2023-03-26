@@ -23,7 +23,7 @@ class Hoop {
   }
 
 }
-const hoop = new Hoop(300, 428, 47, 9, "red");
+const hoop = new Hoop(300, 428, 44, 6, "red");
 
 //⛹🏽‍♂️
 class Player {
@@ -86,13 +86,13 @@ let ball = {
 
   crash: function (hoop) {
     return (
-      this.y + 2*this.radius > hoop.y &&
+      this.y + 2 * this.radius > hoop.y &&
       this.y < hoop.y + hoop.height &&
-      this.x + 2*this.radius > hoop.x &&
+      this.x + 2 * this.radius > hoop.x &&
       this.x < hoop.x + hoop.width
     );
 
-    
+
   },
 
   reset: function () {
@@ -110,7 +110,7 @@ let rainbow = {
   rainbowY: function (x) {
     return (
       (-0.5 * 9.81 * Math.pow(x, 2)) /
-        (Math.cos(this.alpha) ** 2 * this.v0 ** 2) +
+      (Math.cos(this.alpha) ** 2 * this.v0 ** 2) +
       Math.tan(this.alpha) * x
     );
   },
@@ -139,6 +139,7 @@ let rainbow = {
  */
 const myGameArea = {
   canvas: document.createElement("canvas"),
+
 
   start: function () {
     const canvas = this.canvas;
@@ -190,8 +191,10 @@ const myGameArea = {
     });
   },
 
+
+  // BOUCLE D'ANIMATION --> toutes les 16ms🎦
   draw: function () {
-    // BOUCLE D'ANIMATION --> toutes les 16ms🎦
+
     const ctx = this.context;
 
     ctx.clearRect(0, 0, 1200, 1000); //🧽
@@ -206,7 +209,7 @@ const myGameArea = {
     ball.y = play1.y + 80;
 
     if (play1.shooted) {
-      ball.deltaX += 5;
+      ball.deltaX += 6;
 
       ball.x -= ball.deltaX;
 
@@ -216,13 +219,21 @@ const myGameArea = {
     ball.draw();
     rainbow.draw();
 
+
     //bucketORnot
     const crashed = ball.crash(hoop);
-    console.log("is crashed?", crashed);
+
+    //STOP
+    stop = function () {
+      cancelAnimationFrame(this.int);
+    };
+
     if (crashed === true) {
       console.log("CRASHH!!!!!!");
-      this.stop();
-    }
+      const scoreBoard = document.querySelector(".score")
+      scoreBoard.innerHTML += "🏀"
+
+    };
 
     // rappel toutes les 16ms la Function DRAW
     this.int = requestAnimationFrame(() => {
@@ -230,9 +241,7 @@ const myGameArea = {
     });
   },
 
-  stop: function () {
-    cancelAnimationFrame(this.int);
-  },
+
 };
 
 /*
@@ -250,50 +259,33 @@ document.getElementById("start-button").onclick = () => {
   if (ball.crash(hoop)) {
     ball.reset();
     const scoreElement = document.querySelector('.score span');
-    scoreElement.textContent += 2 ;
+    scoreElement.textContent += 2;
   }
-  
+
+  if (clock.startTimer() === 0){
+    stop();
+  }
 };
 
-  //timer 
-  const clock = {
-    departMinutes: 1,
-    temps: 0,
-    timer: document.getElementById("timer"),
-  
-    startTimer: function() {
-      this.temps = this.departMinutes * 60;
-  
-      setInterval(() => {
-        let minutes = parseInt(this.temps / 60, 10);
-        let secondes = parseInt(this.temps % 60, 10);
-    
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        secondes = secondes < 10 ? "0" + secondes : secondes;
-    
-        this.timer.innerText = `${minutes}:${secondes}`;
-        this.temps = this.temps <= 0 ? 0 : this.temps - 1;
-      }, 1000);
-    }
-  };
+//timer 
+const clock = {
+  departMinutes: 1,
+  temps: 0,
+  timer: document.getElementById("timer"),
 
-if (ball.crash(hoop) === true) {
-    const img = document.createElement("img"); //<img>
-    img.src =
-      "https://imgs.search.brave.com/Tjb67985inFu23CNO3uUJS0KjvWUJ1ME_RFRaz0QLdQ/rs:fit:900:800:1/g:ce/aHR0cHM6Ly9iYW5u/ZXIyLmNsZWFucG5n/LmNvbS8yMDE4MDcy/OS9pdHYva2lzc3Bu/Zy1taWFtaS1oZWF0/LW5iYS1ob3VzdG9u/LXJvY2tldHMtc2Fu/LWFudG9uaW8tc3B1/cnMtYi1iYXNrZXRi/YWxsLW9uLWZpcmUt/NWI1ZTM1YWYxMmJj/NDkuMjYyOTEzMjEx/NTMyOTAwNzgzMDc2/OC5qcGc";
+  startTimer: function () {
+    this.temps = this.departMinutes * 60;
 
-    img.addEventListener("load", () => {
-      this.image = img;
-    });
+    setInterval(() => {
+      let minutes = parseInt(this.temps / 60, 10);
+      let secondes = parseInt(this.temps % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      secondes = secondes < 10 ? "0" + secondes : secondes;
+
+      this.timer.innerText = `${minutes}:${secondes}`;
+      this.temps = this.temps <= 0 ? 0 : this.temps - 1;
+    }, 1000);
   }
-
-  draw = function() {
-    const ctx = myGameArea.context;
-    if (!this.image) return;
-    ctx.drawImage(this.image, this.x, this.y, 150, 150);
-
-
-  const scoreElement = document.querySelector('.score');
-  scoreElement.innerHTML = parseInt(scoreElement.innerHTML) + 2;
-}
+};
 
